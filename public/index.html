@@ -1,0 +1,1827 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CijferTool Carmel College Salland</title>
+<style>
+  :root {
+    /* ── Carmel College Salland – echte huisstijl (zie screenshot) ── */
+    --cs-blauw:        #29b5e8;   /* lichtblauw – hoofdkleur hero/accent */
+    --cs-blauw-hover:  #1a9fd4;   /* iets donkerder voor hover */
+    --cs-blauw-licht:  #e6f7fd;   /* heel lichte blauwe tint, achtergrond */
+    --cs-geel:         #f5c518;   /* geel – koppen, accenten, badges */
+    --cs-geel-hover:   #d9aa00;
+    --cs-groen:        #6ab02c;   /* groen – logo middelste blok */
+    --cs-donkerblauw:  #1a3a6b;   /* donkerblauw – body tekst, "We zien elkaar echt" */
+    --cs-wit:          #ffffff;
+    --cs-nav-grijs:    #f7f7f7;   /* witte/lichtgrijze navigatiebalk */
+    --cs-lijngrijs:    #d8d8d8;
+    --cs-tekstgrijs:   #555555;
+    --cs-paginabg:     #f4f6f8;
+
+    /* Mapping zodat de rest van de CSS werkt */
+    --blauw:            var(--cs-donkerblauw);
+    --blauw-licht:      var(--cs-blauw);
+    --blauw-zeer-licht: var(--cs-blauw-licht);
+    --accent:           var(--cs-blauw);
+    --accent-hover:     var(--cs-blauw-hover);
+    --groen:            #1a7a3c;
+    --groen-licht:      #d4edda;
+    --rood:             #c0392b;
+    --rood-licht:       #fde8e8;
+    --oranje:           #c05621;
+    --oranje-licht:     #fef3e2;
+    --grijs-1:          var(--cs-paginabg);
+    --grijs-2:          var(--cs-lijngrijs);
+    --grijs-3:          #aaaaaa;
+    --grijs-4:          var(--cs-tekstgrijs);
+    --tekst:            var(--cs-donkerblauw);
+    --wit:              var(--cs-wit);
+    --radius:           6px;
+    --schaduw:          0 1px 5px rgba(0,0,0,0.09);
+    --schaduw-zwaar:    0 4px 16px rgba(0,0,0,0.13);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--grijs-1);
+    color: var(--tekst);
+    font-size: 15px;
+    line-height: 1.55;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  /* Witte navigatiebalk (zoals op carmelcollegesalland.nl) + blauwe accentbalk */
+  .header-top {
+    background: var(--cs-wit);
+    padding: 12px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--cs-lijngrijs);
+  }
+  .header-top .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  /* Drie gestapelde blokken zoals het echte CCS-logo */
+  .logo-blokken {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .logo-blok {
+    padding: 3px 10px;
+    font-size: 13px;
+    font-weight: 800;
+    color: white;
+    text-transform: lowercase;
+    letter-spacing: 0.2px;
+    line-height: 1.3;
+  }
+  .logo-blok-1 { background: var(--cs-blauw); }       /* carmel  – lichtblauw */
+  .logo-blok-2 { background: var(--cs-groen); }       /* college – groen     */
+  .logo-blok-3 { background: var(--cs-donkerblauw); } /* salland – donkerblauw */
+  .logo-sub-tekst {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+  }
+  .logo-tool-naam {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--cs-donkerblauw);
+  }
+  .logo-tool-sub {
+    font-size: 11px;
+    color: var(--cs-tekstgrijs);
+  }
+  .header-top .header-acties { display: flex; gap: 8px; }
+
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+  }
+  /* Blauwe balk onder de witte header – signatuur CCS kleur */
+  .header-nav {
+    background: var(--cs-blauw);
+    padding: 0 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 38px;
+  }
+  .header-nav .toets-naam-label {
+    font-size: 13px;
+    color: rgba(255,255,255,0.92);
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 400px;
+  }
+  .header-nav .school-tag {
+    font-size: 12px;
+    color: rgba(255,255,255,0.65);
+  }
+
+  .btn-header {
+    background: rgba(255,255,255,0.2);
+    border: 1.5px solid rgba(255,255,255,0.4);
+    color: #fff;
+    padding: 5px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: background 0.15s;
+  }
+  .btn-header:hover { background: rgba(255,255,255,0.35); }
+
+  /* ── TABS ── */
+  .tabs-bar {
+    background: var(--cs-wit);
+    border-bottom: 2px solid var(--cs-lijngrijs);
+    display: flex;
+    overflow-x: auto;
+    padding: 0 20px;
+    gap: 2px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .tab-btn {
+    padding: 11px 20px;
+    border: none;
+    background: none;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--cs-tekstgrijs);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+    transition: color 0.15s, border-color 0.15s;
+    margin-bottom: -2px;
+  }
+  .tab-btn:hover { color: var(--cs-blauw); }
+  .tab-btn.actief {
+    color: var(--cs-donkerblauw);
+    font-weight: 700;
+    border-bottom-color: var(--cs-blauw);
+  }
+  .tab-badge {
+    display: inline-block;
+    background: var(--cs-geel);
+    color: var(--cs-donkerblauw);
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 1px 7px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  /* ── MAIN ── */
+  main { max-width: 1100px; margin: 0 auto; padding: 24px 16px 60px; }
+  .tab-paneel { display: none; }
+  .tab-paneel.actief { display: block; }
+
+  /* ── KAARTEN ── */
+  .kaart {
+    background: var(--wit);
+    border-radius: var(--radius);
+    box-shadow: var(--schaduw);
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .kaart-titel {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--cs-donkerblauw);
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 3px solid var(--cs-blauw);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .kaart-titel .ictoon { font-size: 18px; }
+
+  /* ── RASTER FORMULIER ── */
+  .veld-raster {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .veld-groep { display: flex; flex-direction: column; gap: 5px; }
+  .veld-groep.breed { grid-column: 1 / -1; }
+  .veld-groep.half { grid-column: span 2; }
+  label { font-size: 13px; font-weight: 600; color: var(--grijs-4); }
+  input[type=text], input[type=number], input[type=date], select, textarea {
+    border: 1.5px solid var(--grijs-2);
+    border-radius: 6px;
+    padding: 8px 11px;
+    font-size: 14px;
+    color: var(--tekst);
+    background: var(--wit);
+    transition: border-color 0.15s, box-shadow 0.15s;
+    width: 100%;
+  }
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(0,119,204,0.15);
+  }
+  input.fout { border-color: var(--rood); }
+  .help-tekst { font-size: 12px; color: var(--grijs-3); margin-top: 2px; }
+  .fout-melding { font-size: 12px; color: var(--rood); margin-top: 3px; display: none; }
+  .fout-melding.zichtbaar { display: block; }
+
+  /* ── KNOPPEN ── */
+  .knop {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 18px;
+    border-radius: 6px;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    white-space: nowrap;
+  }
+  .knop:active { transform: scale(0.97); }
+  .knop-primair { background: var(--cs-blauw); color: white; }
+  .knop-primair:hover { background: var(--cs-blauw-hover); }
+  .knop-secundair { background: var(--grijs-2); color: var(--tekst); }
+  .knop-secundair:hover { background: #cbd5e1; }
+  .knop-groen { background: var(--groen); color: white; }
+  .knop-groen:hover { background: #155e31; }
+  .knop-rood { background: var(--rood); color: white; }
+  .knop-rood:hover { background: #991b1b; }
+  .knop-klein { padding: 5px 12px; font-size: 12px; }
+  .knop-rij { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+
+  /* ── TABEL ── */
+  .tabel-wrapper { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th {
+    background: var(--cs-donkerblauw);
+    color: var(--wit);
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+  td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--grijs-2);
+    vertical-align: middle;
+  }
+  tr:hover td { background: var(--blauw-zeer-licht); }
+  .rij-voldoende td { background: #f0faf4; }
+  .rij-onvoldoende td { background: #fef5f5; }
+  .rij-bespreek td { background: #fff8f0; }
+  .rij-voldoende:hover td { background: #e4f5ea; }
+  .rij-onvoldoende:hover td { background: #fde8e8; }
+  .rij-bespreek:hover td { background: #fef0d8; }
+  .badge {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .badge-voldoende { background: var(--groen-licht); color: var(--groen); }
+  .badge-onvoldoende { background: var(--rood-licht); color: var(--rood); }
+  .badge-bespreek { background: var(--oranje-licht); color: var(--oranje); }
+
+  /* ── BULK TOEVOEGEN BALK ── */
+  .bulk-toevoegen-balk {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    background: var(--cs-blauw-licht);
+    border: 1.5px solid var(--cs-blauw);
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    margin-bottom: 14px;
+  }
+  .bulk-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--cs-donkerblauw);
+    white-space: nowrap;
+  }
+  .bulk-input {
+    width: 130px;
+    padding: 7px 10px;
+    border: 1.5px solid var(--cs-blauw);
+    border-radius: 6px;
+    font-size: 14px;
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+  .bulk-input::-webkit-inner-spin-button,
+  .bulk-input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+  .bulk-klas-input {
+    width: 110px;
+    padding: 7px 10px;
+    border: 1.5px solid var(--cs-blauw);
+    border-radius: 6px;
+    font-size: 14px;
+  }
+
+
+  .leerling-tabel th:last-child, .leerling-tabel td:last-child { text-align: center; }
+  .leerling-tabel input[type=number], .leerling-tabel input[type=text] {
+    padding: 5px 8px;
+    font-size: 13px;
+  }
+  .leerling-tabel select { padding: 5px 8px; font-size: 13px; }
+  /* Verberg pijltjes (spinners) bij alle number-velden in de leerlingentabel */
+  .leerling-tabel input[type=number]::-webkit-inner-spin-button,
+  .leerling-tabel input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+  .leerling-tabel input[type=number] { -moz-appearance: textfield; appearance: textfield; }
+
+  /* ── STAT KAARTEN ── */
+  .stat-raster {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .stat-kaart {
+    background: var(--wit);
+    border-radius: var(--radius);
+    box-shadow: var(--schaduw);
+    padding: 18px 16px;
+    text-align: center;
+    border-top: 3px solid var(--cs-blauw);
+  }
+  .stat-kaart.groen { border-top-color: var(--groen); }
+  .stat-kaart.rood { border-top-color: var(--rood); }
+  .stat-kaart.oranje { border-top-color: var(--oranje); }
+  .stat-waarde { font-size: 28px; font-weight: 800; color: var(--blauw); line-height: 1.1; }
+  .stat-label { font-size: 12px; color: var(--grijs-3); margin-top: 4px; font-weight: 500; }
+
+  /* ── ADVIES BOX ── */
+  .advies-box {
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    font-weight: 600;
+    margin-top: 16px;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .advies-streng { background: var(--rood-licht); color: var(--rood); border-left: 4px solid var(--rood); }
+  .advies-passend { background: var(--groen-licht); color: var(--groen); border-left: 4px solid var(--groen); }
+  .advies-makkelijk { background: var(--oranje-licht); color: var(--oranje); border-left: 4px solid var(--oranje); }
+
+  /* ── NORMERING TABEL ── */
+  .norm-tabel th { background: var(--blauw-licht); }
+  .norm-cesuur td { background: #fff3cd; font-weight: 700; }
+  .norm-voldoende td { background: var(--groen-licht); }
+  .norm-onvoldoende td { background: var(--rood-licht); }
+
+  /* ── ONDERDELEN (RUBRIC) ── */
+  .onderdeel-rij {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--grijs-2);
+  }
+  .onderdeel-rij:last-child { border-bottom: none; }
+  .onderdeel-naam { flex: 1; }
+  .onderdeel-max { width: 100px; }
+  .onderdeel-kleur { width: 6px; height: 32px; border-radius: 3px; background: var(--accent); flex-shrink: 0; }
+
+  /* ── PRESET CHIPS ── */
+  .preset-rij { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .preset-chip {
+    padding: 5px 12px;
+    border-radius: 20px;
+    background: var(--blauw-zeer-licht);
+    border: 1.5px solid var(--grijs-2);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--blauw);
+    transition: background 0.12s, border-color 0.12s;
+  }
+  .preset-chip:hover { background: var(--accent); color: white; border-color: var(--accent); }
+
+  /* ── PROGRESS BAR ── */
+  .voortgang-balk { background: var(--grijs-2); border-radius: 4px; height: 10px; margin-top: 4px; }
+  .voortgang-vulling { height: 100%; border-radius: 4px; background: var(--accent); transition: width 0.3s; }
+  .voortgang-vulling.groen { background: var(--groen); }
+  .voortgang-vulling.rood { background: var(--rood); }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--wit);
+    border-radius: 10px;
+    padding: 28px;
+    max-width: 480px;
+    width: 90%;
+    box-shadow: var(--schaduw-zwaar);
+  }
+  .modal-titel { font-size: 17px; font-weight: 700; margin-bottom: 14px; color: var(--blauw); }
+
+  /* ── TOAST ── */
+  #toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--cs-donkerblauw);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: var(--schaduw-zwaar);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.25s, transform 0.25s;
+    z-index: 9999;
+    max-width: 320px;
+  }
+  #toast.zichtbaar { opacity: 1; transform: translateY(0); }
+  #toast.succes { background: var(--groen); }
+  #toast.fout { background: var(--rood); }
+
+  /* ── LEGE STAAT ── */
+  .leeg-staat {
+    text-align: center;
+    padding: 48px 24px;
+    color: var(--grijs-3);
+  }
+  .leeg-staat .ictoon-groot { font-size: 48px; margin-bottom: 12px; }
+  .leeg-staat p { font-size: 15px; }
+
+  /* ── SCHEIDINGSLIJN ── */
+  hr { border: none; border-top: 1px solid var(--grijs-2); margin: 20px 0; }
+
+  /* ── IMPORT AREA ── */
+  .import-area {
+    border: 2px dashed var(--grijs-2);
+    border-radius: 8px;
+    padding: 24px;
+    text-align: center;
+    color: var(--grijs-4);
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    margin-top: 12px;
+  }
+  .import-area:hover { border-color: var(--accent); background: var(--blauw-zeer-licht); }
+
+  /* ── PRINT ── */
+  @media print {
+    header, .tabs-bar, .knop-rij, .btn-header, #toast { display: none !important; }
+    .tab-paneel { display: block !important; }
+    body { background: white; }
+    .kaart { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
+    main { padding: 0; max-width: 100%; }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    header { flex-wrap: wrap; height: auto; padding: 10px 14px; gap: 6px; }
+    .veld-raster { grid-template-columns: 1fr; }
+    .stat-raster { grid-template-columns: repeat(2, 1fr); }
+    th, td { padding: 7px 8px; font-size: 12px; }
+  }
+
+  .sectie-kop { font-size: 13px; font-weight: 700; color: var(--grijs-4); text-transform: uppercase; letter-spacing: 0.5px; margin: 20px 0 10px; }
+  .formulier-rij { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; }
+  .verdeling-balk { height: 120px; display: flex; align-items: flex-end; gap: 4px; margin: 12px 0; }
+  .verdeling-staaf { flex: 1; background: var(--accent); border-radius: 3px 3px 0 0; min-height: 4px; transition: height 0.3s; position: relative; }
+  .verdeling-staaf span { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 10px; color: var(--grijs-4); white-space: nowrap; }
+  .verdeling-labels { display: flex; gap: 4px; }
+  .verdeling-label { flex: 1; text-align: center; font-size: 10px; color: var(--grijs-3); }
+</style>
+<style>
+:root{--grijs-1:#f3f6fa;--grijs-2:#dce4ed;--grijs-3:#65758a;--radius:16px;--schaduw:0 3px 16px #17365b06;--accent:#087eac;--cs-blauw-hover:#086c97}
+body{font-size:15px;letter-spacing:-.12px}header{position:relative;box-shadow:none;background:white}.header-top{max-width:1240px;margin:auto;border:0;padding:20px 32px}.logo-tool-naam{font-size:17px}.logo-tool-sub{font-size:12px;margin-top:5px}.header-top .header-acties{gap:8px}.btn-header{color:#29435e;border:1px solid #dce4ed;background:white;border-radius:9px;padding:9px 12px}.btn-header:hover{background:#eef5fa}.header-nav{background:#193c63;height:36px;padding:0 max(32px,calc((100vw - 1176px)/2))}.header-nav .school-tag{color:#d0ddeb}.tabs-bar{padding:0 max(24px,calc((100vw - 1192px)/2));border-bottom:1px solid #dde5ef;box-shadow:none;gap:8px}.tab-btn{padding:18px 16px;font-size:13px}.tab-btn.actief{color:#087eac;border-color:#087eac}.tab-badge{background:#e7f4fa;color:#17628a}.intro{display:flex;align-items:center;justify-content:space-between;gap:24px;margin:12px 0 28px}.eyebrow{font-size:10px;letter-spacing:1.8px;font-weight:750;color:#637b90}h1{font-size:36px;line-height:1.2;letter-spacing:-1.4px;margin:10px 0;color:#173959}.intro p{color:#65758a;font-size:15px}.save-state{font-size:12px;white-space:nowrap;color:#347154;background:#e7f3eb;padding:8px 12px;border-radius:30px}.quick-check{display:flex;align-items:center;gap:16px;background:#e7f3fa;border:1px solid #cce3ef;border-radius:14px;padding:18px 24px;margin-bottom:26px}.quick-check>div{margin-right:auto}.quick-check strong{display:block;font-size:14px}.quick-check div span{display:block;color:#60788d;font-size:12px;margin-top:2px}.quick-check input{width:100px;background:white}.quick-check output{font-size:30px;font-weight:800;min-width:50px}.quick-check>span:last-child{font-size:12px;min-width:110px}.quick-arrow{color:#6b8aa3;font-size:22px}main{max-width:1200px;padding:28px 24px 60px}.kaart{padding:26px;border:1px solid #e0e7ef;margin-bottom:20px}.kaart-titel{font-size:17px;border-bottom:1px solid #e6edf3;padding-bottom:16px;gap:10px}.kaart-titel .ictoon{display:none}.veld-raster{gap:20px}input[type=text],input[type=number],input[type=date],select,textarea{padding:11px 12px;border:1px solid #cfdbe6;border-radius:8px;font-size:14px;min-height:42px}label{font-size:12px;color:#40566d}.help-tekst{color:#65758a}.knop{border-radius:8px;padding:11px 16px;font-size:13px}.knop-primair{background:#087eac}.knop-secundair{background:#edf2f7}.knop-rood{background:#fff0ef;color:#aa3834;border:1px solid #f1d2d0}.knop-rood:hover{background:#f9ddda}.knop-klein{padding:6px 10px}.preset-chip{background:white;border-color:#d8e4ed;border-radius:8px;padding:8px 12px}.sectie-kop{font-size:10px;letter-spacing:1.1px;margin-top:0}.bulk-toevoegen-balk{border:1px solid #cce3ef;border-radius:10px}.bulk-input{max-width:145px}.bulk-klas-input{max-width:120px}.tabel-wrapper{border-radius:10px;border:1px solid #dce4ed}.tabel-wrapper:has(tbody:empty){border:0}th,.norm-tabel th{background:#edf3f8;color:#39536c;padding:13px 12px}.leerling-tabel{min-width:680px}td{border-color:#e3ebf1}.stat-kaart{border:1px solid #dce4ed;border-top:3px solid #219dcc;text-align:left;padding:22px}.stat-waarde{font-size:32px}.stat-label{margin-top:9px}.leeg-staat{color:#61748a}.verdeling-balk{height:170px;gap:10px;margin:30px 0 12px}.verdeling-labels{gap:10px}.verdeling-staaf{border-radius:6px 6px 0 0}.carmel-footer{background:transparent!important;color:#65758a!important;border-top:1px solid #dce4ed!important;margin-top:0!important}button:focus-visible,[role=button]:focus-visible{outline:3px solid #087eac;outline-offset:4px}#tab-instellingen.actief{display:grid;grid-template-columns:1fr 1fr;gap:0 20px}#tab-instellingen>.kaart:first-child{grid-column:1/-1}#tab-instellingen>.kaart:nth-child(3){grid-column:2;grid-row:2/4}#tab-instellingen>.kaart:nth-child(4){grid-column:1}.quick-check input:invalid{border-color:#b73838}
+@media(max-width:850px){#tab-instellingen.actief{display:block}.header-top{padding:16px 20px}.logo-tool-naam{font-size:14px}.header-top{flex-wrap:wrap;gap:16px}.intro{align-items:flex-start}.quick-check{flex-wrap:wrap}.quick-check>div{width:100%}.quick-check>span:last-child{min-width:0}.school-tag{display:none}}
+@media(max-width:540px){header{padding:0}.header-top{padding:16px}.header-top .header-acties{width:100%}.btn-header{flex:1;font-size:12px}.header-nav{padding:0 16px}.tabs-bar{padding:0 8px;gap:0}.tab-btn{padding:15px 12px}main{padding:20px 14px 40px}.intro{display:block;margin-top:0}h1{font-size:29px}.save-state{display:inline-block;margin-top:15px}.kaart{padding:20px}.quick-check{padding:16px;gap:10px}.quick-check input{width:85px}.veld-groep.half{grid-column:auto}.logo-tool-naam{max-width:210px}.bulk-toevoegen-balk{padding:14px}.bulk-label{white-space:normal}.stat-raster{gap:10px}}
+@media print{.intro,.quick-check{display:none!important}.tab-paneel{display:none!important}.tab-paneel.actief{display:block!important}.kaart{border-radius:0}.header-acties,.bulk-toevoegen-balk,.import-area{display:none!important}input,select{border:0!important}.leerling-tabel{min-width:0}}
+</style></head>
+<body>
+
+<header>
+  <!-- Witte balk met het drie-blokken Carmel College Salland logo -->
+  <div class="header-top">
+    <div class="logo">
+      <div class="logo-blokken">
+        <div class="logo-blok logo-blok-1">carmel</div>
+        <div class="logo-blok logo-blok-2">college</div>
+        <div class="logo-blok logo-blok-3">salland</div>
+      </div>
+      <div class="logo-sub-tekst">
+        <span class="logo-tool-naam">CijferTool Carmel College Salland</span>
+        <span class="logo-tool-sub">Normeringstool voor docenten</span>
+      </div>
+    </div>
+    <div class="header-acties">
+      <button class="btn-header" onclick="allesWissen()">🗑️ Wissen</button>
+      <button class="btn-header" onclick="window.print()">🖨️ Afdrukken</button>
+    </div>
+  </div>
+  <!-- Lichtblauwe accentbalk – signatuurkleur CCS -->
+  <div class="header-nav">
+    <span class="toets-naam-label" id="header-toets-naam">Geen toets geladen</span>
+    <span class="school-tag">Raalte · Voortgezet onderwijs</span>
+  </div>
+</header>
+
+<nav class="tabs-bar">
+  <button class="tab-btn actief" onclick="wisselTab('instellingen', this)">⚙️ Toetsinstellingen</button>
+  <button class="tab-btn" onclick="wisselTab('leerlingen', this)">👨‍🎓 Leerlingen <span class="tab-badge" id="badge-leerlingen">0</span></button>
+  <button class="tab-btn" onclick="wisselTab('normering', this)">📊 Normeringstabel</button>
+  <button class="tab-btn" onclick="wisselTab('analyse', this)">📈 Analyse</button>
+  <button class="tab-btn" onclick="wisselTab('export', this)">💾 Export & Import</button>
+</nav>
+
+<main>
+<section class="intro"><div><span class="eyebrow">CARMEL COLLEGE SALLAND · DOCENTENTOOL</span><h1>Van punten naar inzicht.</h1><p>Stel je toets in, voer scores in en bekijk de resultaten.</p></div><span class="save-state" id="save-state" role="status">Lokaal op dit apparaat</span></section>
+<section class="quick-check" aria-label="Snelle cijfercontrole"><div><strong>Even een cijfer checken</strong><span>Met je huidige normering</span></div><label for="quick-score">Score</label><input id="quick-score" type="number" min="0" step="any" placeholder="Punten" oninput="updateQuick()"><span class="quick-arrow" aria-hidden="true">→</span><output id="quick-result" for="quick-score">—</output><span id="quick-caption">Vul een score in</span></section>
+
+<!-- ══════════════════════════════════════════════════
+     TAB 1: INSTELLINGEN
+════════════════════════════════════════════════════ -->
+<div class="tab-paneel actief" id="tab-instellingen">
+
+  <div class="kaart">
+    <div class="kaart-titel"><span class="ictoon">📝</span> Toetsgegevens</div>
+    <div class="veld-raster">
+      <div class="veld-groep">
+        <label for="toets-naam">Naam van de toets</label>
+        <input type="text" id="toets-naam" placeholder="bijv. Proefwerk hoofdstuk 3" oninput="slaOp()">
+      </div>
+      <div class="veld-groep">
+        <label for="toets-vak">Vak</label>
+        <input type="text" id="toets-vak" placeholder="bijv. Wiskunde" oninput="slaOp()">
+      </div>
+      <div class="veld-groep">
+        <label for="toets-klas">Klas</label>
+        <input type="text" id="toets-klas" placeholder="bijv. 3H" oninput="slaOp()">
+      </div>
+      <div class="veld-groep">
+        <label for="toets-datum">Datum</label>
+        <input type="date" id="toets-datum" oninput="slaOp()">
+      </div>
+    </div>
+  </div>
+
+  <div class="kaart">
+    <div class="kaart-titel"><span class="ictoon">🔢</span> Puntenverdeling</div>
+    <div class="veld-raster">
+      <div class="veld-groep">
+        <label for="max-punten">Maximaal aantal punten</label>
+        <input type="number" id="max-punten" value="41" min="1" oninput="slaOp(); herbereken()">
+        <div class="fout-melding" id="fout-maxpunten">Moet groter zijn dan 0</div>
+      </div>
+      <div class="veld-groep">
+        <label for="min-cijfer">Minimaal cijfer</label>
+        <input type="number" id="min-cijfer" value="1.0" min="0" max="10" step="0.1" oninput="slaOp()">
+      </div>
+      <div class="veld-groep">
+        <label for="max-cijfer">Maximaal cijfer</label>
+        <input type="number" id="max-cijfer" value="10.0" min="0" max="10" step="0.1" oninput="slaOp()">
+      </div>
+      <div class="veld-groep">
+        <label for="cesuur-pct">Cesuurpercentage (%)</label>
+        <input type="number" id="cesuur-pct" value="55" min="1" max="100" oninput="slaOp(); herbereken()">
+        <div class="help-tekst" id="cesuur-punten-label">= 0 punten voor een voldoende</div>
+      </div>
+      <div class="veld-groep">
+        <label for="afronding">Afronding</label>
+        <select id="afronding" onchange="slaOp(); herbereken()">
+          <option value="0.1">Één decimaal (6.4)</option>
+          <option value="0.5">Halve cijfers (6.5)</option>
+          <option value="1">Hele cijfers (6)</option>
+        </select>
+      </div>
+      <div class="veld-groep">
+        <label for="bonuspunten">Bonuspunten toegestaan</label>
+        <select id="bonuspunten" onchange="slaOp()">
+          <option value="nee">Nee</option>
+          <option value="ja">Ja</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="kaart">
+    <div class="kaart-titel"><span class="ictoon">📐</span> Normeringsformule</div>
+
+    <div class="sectie-kop">Snelle presets</div>
+    <div class="preset-rij">
+      <div class="preset-chip" onclick="laadPreset('lineair')">Lineair: score/max × 9 + 1</div>
+      <div class="preset-chip" onclick="laadPreset('lineair12')">Lineair + opslag 1,2</div>
+      <div class="preset-chip" onclick="laadPreset('div56')">Score ÷ 5,6</div>
+      <div class="preset-chip" onclick="laadPreset('div4plus2')">Score ÷ 4 + 2</div>
+      <div class="preset-chip" onclick="laadPreset('41')">9/41 × score + 1,2</div>
+      <div class="preset-chip" onclick="laadPreset('34')">9/34 × score + 1</div>
+      <div class="preset-chip" onclick="laadPreset('31')">9/31 × score + 1</div>
+      <div class="preset-chip" onclick="laadPreset('cesuur')">Cesuurmodel</div>
+    </div>
+
+    <hr>
+
+    <div class="veld-raster" style="margin-top:8px">
+      <div class="veld-groep breed">
+        <label for="formule-type">Normeringsmodel</label>
+        <select id="formule-type" onchange="wisselFormule(); slaOp(); herbereken()">
+          <option value="lineair">Lineair: score / max × 9 + opslag</option>
+          <option value="cesuur">Cesuurmodel (schaal op basis van cesuur)</option>
+          <option value="delerfixed">Vaste deler: score / deler</option>
+          <option value="delerplus">Deler + optelling: score / deler + waarde</option>
+          <option value="nterm">Lineair model met instelbaar startcijfer</option>
+          <option value="handmatig">Handmatige formule (JavaScript)</option>
+        </select>
+      </div>
+
+      <!-- Lineair opties -->
+      <div class="veld-groep" id="veld-opslag">
+        <label for="lineair-opslag">Opslag (standaard 1)</label>
+        <input type="number" id="lineair-opslag" value="1.0" step="0.1" oninput="slaOp(); herbereken()">
+        <div class="help-tekst">cijfer = 9 / max × score + opslag</div>
+      </div>
+
+      <!-- Deler -->
+      <div class="veld-groep" id="veld-deler" style="display:none">
+        <label for="deler-waarde">Deler</label>
+        <input type="number" id="deler-waarde" value="5.6" step="0.01" oninput="slaOp(); herbereken()">
+        <div class="help-tekst">cijfer = score / deler</div>
+      </div>
+      <div class="veld-groep" id="veld-delerplus" style="display:none">
+        <label for="delerplus-deler">Deler</label>
+        <input type="number" id="delerplus-deler" value="4" step="0.01" oninput="slaOp(); herbereken()">
+      </div>
+      <div class="veld-groep" id="veld-delerplus2" style="display:none">
+        <label for="delerplus-plus">Optelling</label>
+        <input type="number" id="delerplus-plus" value="2" step="0.1" oninput="slaOp(); herbereken()">
+        <div class="help-tekst">cijfer = score / deler + optelling</div>
+      </div>
+
+      <!-- N-term -->
+      <div class="veld-groep" id="veld-nterm" style="display:none">
+        <label for="nterm-waarde">Startcijfer (N)</label>
+        <input type="number" id="nterm-waarde" value="1.0" step="0.1" oninput="slaOp(); herbereken()">
+        <div class="help-tekst">cijfer = score / max × (10 - N) + N</div>
+      </div>
+
+      <!-- Handmatig -->
+      <div class="veld-groep breed" id="veld-handmatig" style="display:none">
+        <label for="handmatig-formule">JavaScript-formule (gebruik 'score' en 'max')</label>
+        <input type="text" id="handmatig-formule" placeholder="bijv. score / max * 9 + 1" oninput="slaOp(); herbereken()">
+        <div class="help-tekst">Voorbeeld: score / 41 * 9 + 1.2</div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px; padding:12px 16px; background:var(--blauw-zeer-licht); border-radius:6px; font-size:14px;">
+      <strong>Actuele formule:</strong> <span id="formule-beschrijving" style="color:var(--blauw)">—</span><br>
+      <span style="font-size:12px; color:var(--grijs-4)">Cesuur: score ≥ <strong id="cesuur-score">—</strong> → cijfer ≥ 5,5 (voldoende)</span>
+    </div>
+  </div>
+
+  <div class="kaart">
+    <div class="kaart-titel"><span class="ictoon">📦</span> Onderdelen / Rubric (optioneel)</div>
+    <p style="font-size:13px; color:var(--grijs-4); margin-bottom:14px">Voeg onderdelen toe als de toets bestaat uit meerdere categorieën met eigen weging. De totaalscore wordt automatisch berekend.</p>
+
+    <div id="onderdelen-lijst"></div>
+
+    <div class="knop-rij">
+      <button class="knop knop-secundair" onclick="voegOnderdeelToe()">➕ Onderdeel toevoegen</button>
+      <button class="knop knop-secundair" onclick="verwijderOnderdelen()">🗑️ Onderdelen wissen</button>
+    </div>
+
+    <div id="onderdelen-totaal" style="display:none; margin-top:16px; padding:12px; background:var(--grijs-1); border-radius:6px; font-size:14px;">
+      Totaal: <strong id="onderdelen-max-totaal">0</strong> punten
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     TAB 2: LEERLINGEN
+════════════════════════════════════════════════════ -->
+<div class="tab-paneel" id="tab-leerlingen">
+
+  <div class="kaart">
+    <div class="kaart-titel"><span class="ictoon">👨‍🎓</span> Leerlingen invoeren</div>
+    <p style="font-size:13px; color:var(--grijs-4); margin-bottom:14px">Voeg leerlingen toe. Cijfers worden automatisch berekend op basis van de ingestelde formule.</p>
+
+    <div class="bulk-toevoegen-balk">
+      <span class="bulk-label">Klas in één keer aanmaken:</span>
+      <input type="number" id="bulk-aantal" min="1" max="50" placeholder="Aantal leerlingen" class="bulk-input">
+      <input type="text" id="bulk-klas" placeholder="Klas (bijv. 3H)" class="bulk-klas-input">
+      <button class="knop knop-primair" onclick="voegKlasToe()">➕ Rijen aanmaken</button>
+    </div>
+
+    <div class="knop-rij" style="margin-top:0; margin-bottom:16px;">
+      <button class="knop knop-secundair" onclick="voegLeerlingToe()">+ Eén leerling toevoegen</button>
+      <button class="knop knop-secundair" onclick="sorterenOpCijfer()">↕️ Sorteren op cijfer</button>
+      <button class="knop knop-rood" onclick="verwijderAlleLeerlingen()">🗑️ Alle leerlingen wissen</button>
+    </div>
+
+    <div class="tabel-wrapper">
+      <table class="leerling-tabel">
+        <thead id="leerling-thead">
+          <!-- dynamisch -->
+        </thead>
+        <tbody id="leerling-tbody">
+          <!-- dynamisch -->
+        </tbody>
+      </table>
+    </div>
+
+    <div id="leerlingen-leeg" class="leeg-staat">
+      <div class="ictoon-groot">👨‍🎓</div>
+      <p>Nog geen leerlingen toegevoegd.<br>Klik op <strong>Leerling toevoegen</strong> om te beginnen.</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     TAB 3: NORMERINGSTABEL
+════════════════════════════════════════════════════ -->
+<div class="tab-paneel" id="tab-normering">
+
+  <div class="kaart">
+    <div class="kaart-titel"><span class="ictoon">📊</span> Normeringstabel</div>
+
+    <div style="margin-bottom:16px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+      <span style="font-size:13px; color:var(--grijs-4)">
+        🟢 Groen = voldoende (≥5,5) &nbsp;|&nbsp; 🔴 Rood = onvoldoende &nbsp;|&nbsp; 🟡 Geel = cesuurpunt
+      </span>
+      <button class="knop knop-secundair knop-klein" onclick="kopieerNormeringstabel()">📋 Kopiëren</button>
+      <button class="knop knop-secundair knop-klein" onclick="exporteerNormeringCSV()">⬇️ CSV</button>
+    </div>
+
+    <div class="tabel-wrapper">
+      <table class="norm-tabel">
+        <thead>
+          <tr>
+            <th>Score</th>
+            <th>Cijfer</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="norm-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     TAB 4: ANALYSE
+════════════════════════════════════════════════════ -->
+<div class="tab-paneel" id="tab-analyse">
+
+  <div id="analyse-leeg" class="kaart">
+    <div class="leeg-staat">
+      <div class="ictoon-groot">📈</div>
+      <p>Voer eerst een score in om de analyse te bekijken. Lege scores tellen niet mee.</p>
+    </div>
+  </div>
+
+  <div id="analyse-inhoud" style="display:none">
+    <div class="stat-raster" id="stat-raster"></div>
+
+    <div class="kaart">
+      <div class="kaart-titel"><span class="ictoon">🏆</span> Slagingspercentage</div>
+      <div id="voortgang-sectie"></div>
+      <div id="advies-box"></div>
+    </div>
+
+    <div class="kaart">
+      <div class="kaart-titel"><span class="ictoon">📊</span> Verdeling cijfers</div>
+      <div class="verdeling-balk" id="verdeling-balk"></div>
+      <div class="verdeling-labels" id="verdeling-labels"></div>
+      <p style="font-size:12px;color:var(--grijs-3);margin-top:8px">Elke staaf = één punt op de schaal (1–10)</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     TAB 5: EXPORT & IMPORT
+════════════════════════════════════════════════════ -->
+<div class="tab-paneel" id="tab-export">
+
+  <div class="kaart">
+    <div class="kaart-titel"><span class="ictoon">💾</span> Exporteren</div>
+    <div class="knop-rij" style="margin-top:0">
+      <button class="knop knop-primair" onclick="exporteerLeerlingenCSV()">⬇️ Leerlingenlijst (CSV)</button>
+      <button class="knop knop-primair" onclick="exporteerExcelCSV()">⬇️ Excel-compatibele CSV</button>
+      <button class="knop knop-secundair" onclick="exporteerNormeringCSV()">⬇️ Normeringstabel (CSV)</button>
+      <button class="knop knop-secundair" onclick="exporteerJSON()">⬇️ Volledige toets (JSON)</button>
+      <button class="knop knop-secundair" onclick="window.print()">🖨️ Afdrukken / PDF</button>
+    </div>
+  </div>
+
+  <div class="kaart">
+    <div class="kaart-titel"><span class="ictoon">⬆️</span> Importeren</div>
+    <p style="font-size:13px; color:var(--grijs-4); margin-bottom:12px">
+      Importeer leerlingen vanuit een CSV-bestand. Verwachte kolommen: <code>naam, klas, score</code> of <code>voornaam, achternaam, klas, score</code>.<br>
+      Elke leerling op een nieuwe regel. De eerste regel moet kolomnamen bevatten. Namen worden niet opgeslagen.
+    </p>
+    <div class="knop-rij" style="margin-top:0; margin-bottom:12px;">
+      <button class="knop knop-secundair" onclick="document.getElementById('csv-import-input').click()">📂 CSV-bestand kiezen</button>
+    </div>
+    <input type="file" id="csv-import-input" accept=".csv,.txt" style="display:none" onchange="importeerCSV(this)">
+
+    <div class="import-area" onclick="document.getElementById('csv-import-input').click()">
+      📄 Klik hier om een CSV-bestand te kiezen
+    </div>
+
+    <hr>
+    <p style="font-size:13px; color:var(--grijs-4); margin-bottom:8px">Of plak CSV-tekst direct:</p>
+    <textarea id="csv-plak-tekst" rows="6" style="width:100%; font-family:monospace; font-size:12px;" placeholder="naam,klas,score&#10;Jan Jansen,3H,32&#10;Emma de Vries,3H,28"></textarea>
+    <div class="knop-rij">
+      <button class="knop knop-primair" onclick="importeerGeplakteCSV()">⬆️ Importeer geplakte tekst</button>
+    </div>
+  </div>
+
+  <div class="kaart">
+    <div class="kaart-titel"><span class="ictoon">📂</span> Toets laden/opslaan</div>
+    <p style="font-size:13px; color:var(--grijs-4); margin-bottom:12px">Sla de volledige toets op als JSON en laad deze later terug.</p>
+    <div class="knop-rij" style="margin-top:0">
+      <button class="knop knop-groen" onclick="exporteerJSON()">💾 Opslaan als JSON</button>
+      <button class="knop knop-secundair" onclick="document.getElementById('json-import-input').click()">📂 JSON laden</button>
+    </div>
+    <input type="file" id="json-import-input" accept=".json" style="display:none" onchange="importeerJSON(this)">
+  </div>
+</div>
+
+</main>
+
+<!-- ── TOAST ── -->
+<div id="toast" role="status" aria-live="polite"></div>
+
+<!-- ── MODAL: onderdeel toevoegen ── -->
+<div class="modal-overlay" id="modal-overlay" onclick="sluitModal(event)">
+  <div class="modal" id="modal-inhoud">
+    <!-- dynamisch gevuld -->
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════
+let staat = {
+  toets: { naam: '', vak: '', klas: '', datum: '' },
+  instellingen: {
+    maxPunten: 41,
+    minCijfer: 1.0,
+    maxCijfer: 10.0,
+    cesuurPct: 55,
+    afronding: 0.1,
+    bonuspunten: 'nee',
+    formuleType: 'lineair',
+    lineairOpslag: 1.0,
+    delerWaarde: 5.6,
+    delerPlusDeler: 4,
+    delerPlusPlus: 2,
+    ntermWaarde: 1.0,
+    handmatigFormule: ''
+  },
+  onderdelen: [],
+  leerlingen: []
+};
+
+// ══════════════════════════════════════════════════
+// TABS
+// ══════════════════════════════════════════════════
+function wisselTab(naam, knop) {
+  document.querySelectorAll('.tab-paneel').forEach(p => p.classList.remove('actief'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('actief'));
+  document.getElementById('tab-' + naam).classList.add('actief');
+  knop.classList.add('actief');
+
+  if (naam === 'normering') bouwNormeringstabel();
+  if (naam === 'analyse') bouwAnalyse();
+}
+
+// ══════════════════════════════════════════════════
+// FORMULE LOGICA
+// ══════════════════════════════════════════════════
+function berekenCijfer(score, inst) {
+  const max = inst.maxPunten;
+  const min = inst.minCijfer;
+  const maxC = inst.maxCijfer;
+  let cijfer;
+
+  switch (inst.formuleType) {
+    case 'lineair':
+      cijfer = (9 / max) * score + inst.lineairOpslag;
+      break;
+    case 'cesuur': {
+      const cesuurScore = Math.ceil(max * inst.cesuurPct / 100);
+      if (score >= cesuurScore) {
+        cijfer = max === cesuurScore ? 5.5 : 5.5 + ((score - cesuurScore) / (max - cesuurScore)) * 4.5;
+      } else {
+        cijfer = min + (score / cesuurScore) * (5.5 - min - 0.01);
+      }
+      break;
+    }
+    case 'delerfixed':
+      cijfer = score / inst.delerWaarde;
+      break;
+    case 'delerplus':
+      cijfer = score / inst.delerPlusDeler + inst.delerPlusPlus;
+      break;
+    case 'nterm':
+      cijfer = (score / max) * (10 - inst.ntermWaarde) + inst.ntermWaarde;
+      break;
+    case 'handmatig': {
+      try {
+        // eslint-disable-next-line no-new-func
+        const fn = new Function('score', 'max', 'return ' + inst.handmatigFormule);
+        cijfer = fn(score, max);
+      } catch (e) { cijfer = 1; }
+      break;
+    }
+    default:
+      cijfer = (9 / max) * score + 1;
+  }
+
+  // Afronden
+  const afrond = inst.afronding;
+  cijfer = Math.round(cijfer / afrond) * afrond;
+
+  // Begrenzen
+  cijfer = Math.min(maxC, Math.max(min, cijfer));
+  return +cijfer.toFixed(2);
+}
+
+function getCesuurScore() {
+  const inst = staat.instellingen;
+  if (inst.formuleType === 'cesuur') {
+    return Math.ceil(inst.maxPunten * inst.cesuurPct / 100);
+  }
+  // Zoek score waarbij cijfer >= 5.5
+  for (let s = 0; s <= inst.maxPunten + 20; s++) {
+    if (berekenCijfer(s, inst) >= 5.5) return s;
+  }
+  return '?';
+}
+
+function formuleBeschrijving() {
+  const i = staat.instellingen;
+  const max = i.maxPunten;
+  switch (i.formuleType) {
+    case 'lineair': return `cijfer = 9 / ${max} × score + ${i.lineairOpslag}`;
+    case 'cesuur': return `Cesuurmodel – voldoende vanaf ${i.cesuurPct}% (${Math.ceil(max * i.cesuurPct / 100)} punten)`;
+    case 'delerfixed': return `cijfer = score / ${i.delerWaarde}`;
+    case 'delerplus': return `cijfer = score / ${i.delerPlusDeler} + ${i.delerPlusPlus}`;
+    case 'nterm': return `cijfer = score / ${max} × (10 − ${i.ntermWaarde}) + ${i.ntermWaarde}`;
+    case 'handmatig': return `Handmatig: ${i.handmatigFormule || '(geen formule ingevoerd)'}`;
+    default: return '—';
+  }
+}
+
+// ══════════════════════════════════════════════════
+// FORMULIER ↔ STATE
+// ══════════════════════════════════════════════════
+function leesFormulier() {
+  const i = staat.instellingen;
+  staat.toets.naam = v('toets-naam');
+  staat.toets.vak = v('toets-vak');
+  staat.toets.klas = v('toets-klas');
+  staat.toets.datum = v('toets-datum');
+
+  i.maxPunten = +v('max-punten') || 41;
+  i.minCijfer = v('min-cijfer') === '' ? 1 : +v('min-cijfer');
+  i.maxCijfer = +v('max-cijfer') || 10.0;
+  i.cesuurPct = +v('cesuur-pct') || 55;
+  i.afronding = +v('afronding');
+  i.bonuspunten = v('bonuspunten');
+  i.formuleType = v('formule-type');
+  i.lineairOpslag = +v('lineair-opslag');
+  i.delerWaarde = +v('deler-waarde');
+  i.delerPlusDeler = +v('delerplus-deler');
+  i.delerPlusPlus = +v('delerplus-plus');
+  i.ntermWaarde = +v('nterm-waarde');
+  i.handmatigFormule = v('handmatig-formule');
+}
+
+function vulFormulierIn() {
+  const i = staat.instellingen;
+  const t = staat.toets;
+  z('toets-naam', t.naam);
+  z('toets-vak', t.vak);
+  z('toets-klas', t.klas);
+  z('toets-datum', t.datum);
+  z('max-punten', i.maxPunten);
+  z('min-cijfer', i.minCijfer);
+  z('max-cijfer', i.maxCijfer);
+  z('cesuur-pct', i.cesuurPct);
+  z('afronding', i.afronding);
+  z('bonuspunten', i.bonuspunten);
+  z('formule-type', i.formuleType);
+  z('lineair-opslag', i.lineairOpslag);
+  z('deler-waarde', i.delerWaarde);
+  z('delerplus-deler', i.delerPlusDeler);
+  z('delerplus-plus', i.delerPlusPlus);
+  z('nterm-waarde', i.ntermWaarde);
+  z('handmatig-formule', i.handmatigFormule);
+  wisselFormule();
+}
+
+function v(id) { const el = document.getElementById(id); return el ? el.value : ''; }
+function z(id, waarde) { const el = document.getElementById(id); if (el) el.value = waarde; }
+
+function wisselFormule() {
+  const type = document.getElementById('formule-type')?.value || 'lineair';
+  const velden = { 'veld-opslag': ['lineair'], 'veld-deler': ['delerfixed'], 'veld-delerplus': ['delerplus'], 'veld-delerplus2': ['delerplus'], 'veld-nterm': ['nterm'], 'veld-handmatig': ['handmatig'] };
+  for (const [id, typen] of Object.entries(velden)) {
+    const el = document.getElementById(id);
+    if (el) el.style.display = typen.includes(type) ? '' : 'none';
+  }
+}
+
+// ══════════════════════════════════════════════════
+// HERBEREKENEN (na invoerwijziging)
+// ══════════════════════════════════════════════════
+function herbereken() {
+  leesFormulier();
+  updateCesuurLabel();
+  updateFormuleBeschrijving();
+  herberekeningLeerlingen();
+  bouwOnderdelen();
+  updateHeaderNaam();
+  document.getElementById('badge-leerlingen').textContent = staat.leerlingen.length;
+}
+
+function updateCesuurLabel() {
+  const cs = getCesuurScore();
+  document.getElementById('cesuur-punten-label').textContent = `= ${cs} punten voor een voldoende`;
+}
+
+function updateFormuleBeschrijving() {
+  document.getElementById('formule-beschrijving').textContent = formuleBeschrijving();
+  document.getElementById('cesuur-score').textContent = getCesuurScore();
+}
+
+function updateHeaderNaam() {
+  const naam = staat.toets.naam || 'Naamloos';
+  const vak = staat.toets.vak ? ` – ${staat.toets.vak}` : '';
+  const klas = staat.toets.klas ? ` | ${staat.toets.klas}` : '';
+  document.getElementById('header-toets-naam').textContent = naam + vak + klas;
+}
+
+// ══════════════════════════════════════════════════
+// OPSLAAN / LADEN
+// ══════════════════════════════════════════════════
+function slaOp() {
+  leesFormulier();
+  try { localStorage.setItem('cijfertool_schone_versie_v1', JSON.stringify(staat)); } catch(e) {}
+  updateHeaderNaam();
+}
+
+function laadVanStorage() {
+  try {
+    const raw = localStorage.getItem('cijfertool_schone_versie_v1');
+    if (raw) {
+      const geladen = JSON.parse(raw);
+      // Samenvoegen (zodat nieuwe velden behouden blijven)
+      staat.toets = { ...staat.toets, ...geladen.toets };
+      staat.instellingen = { ...staat.instellingen, ...geladen.instellingen };
+      staat.onderdelen = geladen.onderdelen || [];
+      staat.leerlingen = geladen.leerlingen || [];
+    }
+  } catch(e) {}
+  vulFormulierIn();
+  herbereken();
+  tekenLeerlingenTabel();
+}
+
+// ══════════════════════════════════════════════════
+// ONDERDELEN
+// ══════════════════════════════════════════════════
+function bouwOnderdelen() {
+  const lijst = document.getElementById('onderdelen-lijst');
+  const totaal = document.getElementById('onderdelen-totaal');
+
+  if (staat.onderdelen.length === 0) {
+    lijst.innerHTML = '';
+    totaal.style.display = 'none';
+    return;
+  }
+
+  totaal.style.display = 'block';
+  let maxTotaal = 0;
+
+  lijst.innerHTML = staat.onderdelen.map((o, idx) => {
+    maxTotaal += (o.max || 0);
+    return `
+    <div class="onderdeel-rij">
+      <div class="onderdeel-kleur"></div>
+      <div class="onderdeel-naam">
+        <input type="text" value="${esc(o.naam)}" placeholder="Naam onderdeel" style="width:100%"
+          oninput="staat.onderdelen[${idx}].naam=this.value; slaOp()">
+      </div>
+      <div class="onderdeel-max">
+        <input type="number" value="${o.max}" placeholder="Max punten" min="0"
+          oninput="staat.onderdelen[${idx}].max=+this.value; berekeningOnderdeelTotaal(); slaOp()">
+      </div>
+      <button class="knop knop-rood knop-klein" onclick="verwijderOnderdeel(${idx})">✕</button>
+    </div>`;
+  }).join('');
+
+  document.getElementById('onderdelen-max-totaal').textContent = maxTotaal;
+}
+
+function berekeningOnderdeelTotaal() {
+  const maxTotaal = staat.onderdelen.reduce((s, o) => s + (o.max || 0), 0);
+  document.getElementById('onderdelen-max-totaal').textContent = maxTotaal;
+}
+
+function voegOnderdeelToe() {
+  staat.onderdelen.push({ naam: '', max: 0 });
+  slaOp();
+  bouwOnderdelen();
+  tekenLeerlingenTabel();
+}
+
+function verwijderOnderdeel(idx) {
+  staat.onderdelen.splice(idx, 1);
+  staat.leerlingen.forEach(l => (l.onderdelen || []).splice(idx, 1));
+  slaOp();
+  bouwOnderdelen();
+  tekenLeerlingenTabel();
+}
+
+function verwijderOnderdelen() {
+  if (!confirm('Alle onderdelen verwijderen?')) return;
+  staat.onderdelen = [];
+  slaOp();
+  bouwOnderdelen();
+  tekenLeerlingenTabel();
+}
+
+// ══════════════════════════════════════════════════
+// LEERLINGEN TABEL
+// ══════════════════════════════════════════════════
+function tekenLeerlingenTabel() {
+  const leeg = document.getElementById('leerlingen-leeg');
+  const thead = document.getElementById('leerling-thead');
+  const tbody = document.getElementById('leerling-tbody');
+
+  if (staat.leerlingen.length === 0) {
+    leeg.style.display = 'block';
+    thead.innerHTML = '';
+    tbody.innerHTML = '';
+    return;
+  }
+  leeg.style.display = 'none';
+
+  const heeftOnderdelen = staat.onderdelen.length > 0;
+  const heeftBonus = staat.instellingen.bonuspunten === 'ja';
+
+  // Kopteksten – geen namen ivm privacy
+  let koppen = '<tr><th>#</th><th>Klas</th>';
+  if (heeftOnderdelen) {
+    staat.onderdelen.forEach(o => { koppen += `<th>${esc(o.naam || 'Onderdeel')} (max ${o.max})</th>`; });
+    koppen += '<th>Totaal</th>';
+  } else {
+    koppen += '<th>Score</th>';
+  }
+  if (heeftBonus) koppen += '<th>Bonus</th>';
+  koppen += '<th>Cijfer</th><th>Status</th><th>Opmerking</th><th></th></tr>';
+  thead.innerHTML = koppen;
+
+  // Rijen
+  tbody.innerHTML = staat.leerlingen.map((ll, idx) => {
+    const inst = staat.instellingen;
+    let score = heeftOnderdelen
+      ? (ll.onderdelen || []).reduce((s, p) => s + (+p || 0), 0)
+      : (+ll.score || 0);
+    if (heeftBonus) score += (+ll.bonus || 0);
+
+    if (!heeftBonus && score > inst.maxPunten) score = inst.maxPunten;
+
+    const cijfer = berekenCijfer(score, inst);
+    const [status, klasse] = cijferStatus(cijfer);
+
+    // Geen naam-kolommen – alleen klas
+    let rij = `<tr class="${klasse}" data-idx="${idx}">
+      <td style="color:var(--grijs-3);font-size:12px">${idx + 1}</td>
+      <td><input type="text" value="${esc(ll.klas || '')}" style="width:60px"
+        onchange="staat.leerlingen[${idx}].klas=this.value;slaOp()"></td>`;
+
+    if (heeftOnderdelen) {
+      staat.onderdelen.forEach((o, oidx) => {
+        const punten = (ll.onderdelen || [])[oidx] ?? '';
+        rij += `<td><input type="number" value="${punten}" min="0" max="${o.max}" style="width:70px"
+          onchange="if(!staat.leerlingen[${idx}].onderdelen)staat.leerlingen[${idx}].onderdelen=[];
+          staat.leerlingen[${idx}].onderdelen[${oidx}]=this.value === '' ? '' : +this.value;herberekeningRij(${idx});slaOp()"></td>`;
+      });
+      rij += `<td><strong>${score}</strong></td>`;
+    } else {
+      rij += `<td><input type="number" value="${ll.score ?? ''}" min="0"
+        ${heeftBonus ? '' : `max="${inst.maxPunten}"`} style="width:80px"
+        onchange="staat.leerlingen[${idx}].score=this.value === '' ? '' : +this.value;herberekeningRij(${idx});slaOp()"></td>`;
+    }
+
+    if (heeftBonus) {
+      rij += `<td><input type="number" value="${ll.bonus || ''}" min="0" style="width:65px"
+        onchange="staat.leerlingen[${idx}].bonus=+this.value;herberekeningRij(${idx});slaOp()"></td>`;
+    }
+
+    rij += `<td><strong id="cijfer-${idx}">${formatCijfer(cijfer)}</strong></td>
+      <td><span class="badge badge-${status.toLowerCase().replace('ë','e')}" id="status-${idx}">${status}</span></td>
+      <td><input type="text" value="${esc(ll.opmerking || '')}" placeholder="opmerking" style="width:120px"
+        onchange="staat.leerlingen[${idx}].opmerking=this.value;slaOp()"></td>
+      <td><button class="knop knop-rood knop-klein" onclick="verwijderLeerling(${idx})">✕</button></td>
+    </tr>`;
+    return rij;
+  }).join('');
+
+  document.getElementById('badge-leerlingen').textContent = staat.leerlingen.length;
+}
+
+function herberekeningRij(idx) {
+  // Herteken alleen na verlaten veld (onchange), niet bij elke toetsaanslag
+  tekenLeerlingenTabel();
+}
+
+function herberekeningLeerlingen() {
+  tekenLeerlingenTabel();
+}
+
+function cijferStatus(cijfer) {
+  if (cijfer >= 5.5) return ['Voldoende', 'rij-voldoende'];
+  if (cijfer >= 5.0) return ['Bespreek', 'rij-bespreek'];
+  return ['Onvoldoende', 'rij-onvoldoende'];
+}
+
+function formatCijfer(c) {
+  const afr = staat.instellingen.afronding;
+  if (afr >= 1) return c.toFixed(0);
+  if (afr >= 0.5) return (Math.round(c * 2) / 2).toFixed(1);
+  return c.toFixed(1);
+}
+
+function voegKlasToe() {
+  const aantalEl = document.getElementById('bulk-aantal');
+  const klasEl = document.getElementById('bulk-klas');
+  const aantal = parseInt(aantalEl.value);
+  const klas = klasEl.value.trim() || staat.toets.klas || '';
+
+  if (!aantal || aantal < 1 || aantal > 50) {
+    toonToast('Vul een aantal in tussen 1 en 50', 'fout');
+    aantalEl.focus();
+    return;
+  }
+
+  for (let i = 0; i < aantal; i++) {
+    staat.leerlingen.push({
+      klas, score: '', bonus: 0, onderdelen: [], opmerking: ''
+    });
+  }
+
+  slaOp();
+  tekenLeerlingenTabel();
+  toonToast(`${aantal} lege rijen aangemaakt voor klas ${klas || '…'}`, 'succes');
+
+  // Scroll naar de tabel en zet focus op eerste lege voornaam
+  setTimeout(() => {
+    const eersteInput = document.querySelector('#leerling-tbody tr:last-child input');
+    if (eersteInput) eersteInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // Zet focus op de eerste lege voornaam van de nieuw aangemaakte rijen
+    const rijen = document.querySelectorAll('#leerling-tbody tr');
+    const eersteNieuwe = rijen[rijen.length - aantal];
+    if (eersteNieuwe) eersteNieuwe.querySelector('input')?.focus();
+  }, 60);
+}
+
+function voegLeerlingToe() {
+  staat.leerlingen.push({ klas: staat.toets.klas || '', score: '', bonus: 0, onderdelen: [], opmerking: '' });
+  slaOp();
+  tekenLeerlingenTabel();
+  // Scroll naar onderaan
+  setTimeout(() => {
+    const tbody = document.getElementById('leerling-tbody');
+    const last = tbody.lastElementChild;
+    if (last) { last.scrollIntoView({ behavior: 'smooth', block: 'center' }); last.querySelector('input')?.focus(); }
+  }, 50);
+}
+
+function verwijderLeerling(idx) {
+  staat.leerlingen.splice(idx, 1);
+  slaOp();
+  tekenLeerlingenTabel();
+}
+
+function verwijderAlleLeerlingen() {
+  if (!confirm(`Alle ${staat.leerlingen.length} leerlingen verwijderen?`)) return;
+  staat.leerlingen = [];
+  slaOp();
+  tekenLeerlingenTabel();
+}
+
+function sorterenOpNaam() {
+  staat.leerlingen.sort((a, b) => (+getLeerlingScore(b)) - (+getLeerlingScore(a)));
+  slaOp();
+  tekenLeerlingenTabel();
+}
+
+function sorterenOpCijfer() {
+  staat.leerlingen.sort((a, b) => {
+    const cA = berekenCijfer(getLeerlingScore(a), staat.instellingen);
+    const cB = berekenCijfer(getLeerlingScore(b), staat.instellingen);
+    return cB - cA;
+  });
+  slaOp();
+  tekenLeerlingenTabel();
+}
+
+function getLeerlingScore(ll) {
+  const heeftOnderdelen = staat.onderdelen.length > 0;
+  let score = heeftOnderdelen
+    ? (ll.onderdelen || []).reduce((s, p) => s + (+p || 0), 0)
+    : (+ll.score || 0);
+  if (staat.instellingen.bonuspunten === 'ja') score += (+ll.bonus || 0);
+  return score;
+}
+
+// ══════════════════════════════════════════════════
+// NORMERINGSTABEL
+// ══════════════════════════════════════════════════
+function bouwNormeringstabel() {
+  leesFormulier();
+  const inst = staat.instellingen;
+  const max = inst.maxPunten;
+  const cesuurScore = getCesuurScore();
+  const tbody = document.getElementById('norm-tbody');
+
+  let html = '';
+  for (let s = 0; s <= max; s++) {
+    const cijfer = berekenCijfer(s, inst);
+    const geformat = formatCijfer(cijfer);
+    const [status] = cijferStatus(cijfer);
+    const isCesuur = s === cesuurScore;
+
+    let klasse = '';
+    if (isCesuur) klasse = 'norm-cesuur';
+    else if (cijfer >= 5.5) klasse = 'norm-voldoende';
+    else klasse = 'norm-onvoldoende';
+
+    html += `<tr class="${klasse}">
+      <td>${s}${isCesuur ? ' ⭐' : ''}</td>
+      <td><strong>${geformat}</strong></td>
+      <td><span class="badge badge-${status === 'Voldoende' ? 'voldoende' : status === 'Bespreek' ? 'bespreek' : 'onvoldoende'}">${status}${isCesuur ? ' (cesuur)' : ''}</span></td>
+    </tr>`;
+  }
+  tbody.innerHTML = html;
+}
+
+// ══════════════════════════════════════════════════
+// ANALYSE
+// ══════════════════════════════════════════════════
+function bouwAnalyse() {
+  leesFormulier();
+  const ll = staat.leerlingen.filter(heeftScore);
+  if (ll.length === 0) {
+    document.getElementById('analyse-leeg').style.display = 'block';
+    document.getElementById('analyse-inhoud').style.display = 'none';
+    return;
+  }
+  document.getElementById('analyse-leeg').style.display = 'none';
+  document.getElementById('analyse-inhoud').style.display = 'block';
+
+  const inst = staat.instellingen;
+  const scores = ll.map(l => getLeerlingScore(l));
+  const cijfers = scores.map(s => berekenCijfer(s, inst));
+
+  const gem = avg(scores);
+  const gemC = avg(cijfers);
+  const max = Math.max(...scores);
+  const min = Math.min(...scores);
+  const vold = cijfers.filter(c => c >= 5.5).length;
+  const onvold = cijfers.length - vold;
+  const pctVold = Math.round(vold / ll.length * 100);
+  const spreiding = stdDev(scores);
+
+  // Stat kaarten
+  const stats = [
+    { waarde: ll.length, label: 'Leerlingen', klasse: '' },
+    { waarde: gem.toFixed(1), label: 'Gem. score', klasse: '' },
+    { waarde: formatCijfer(gemC), label: 'Gem. cijfer', klasse: gemC >= 5.5 ? 'groen' : 'rood' },
+    { waarde: max, label: 'Hoogste score', klasse: 'groen' },
+    { waarde: min, label: 'Laagste score', klasse: 'rood' },
+    { waarde: vold, label: 'Voldoendes', klasse: 'groen' },
+    { waarde: onvold, label: 'Onvoldoendes', klasse: 'rood' },
+    { waarde: pctVold + '%', label: '% geslaagd', klasse: pctVold >= 70 ? 'groen' : pctVold >= 50 ? 'oranje' : 'rood' },
+    { waarde: spreiding.toFixed(1), label: 'Spreiding (SD)', klasse: '' },
+  ];
+
+  document.getElementById('stat-raster').innerHTML = stats.map(s =>
+    `<div class="stat-kaart ${s.klasse}">
+      <div class="stat-waarde">${s.waarde}</div>
+      <div class="stat-label">${s.label}</div>
+    </div>`
+  ).join('');
+
+  // Voortgang
+  const voortgangKlasse = pctVold >= 70 ? 'groen' : pctVold >= 50 ? '' : 'rood';
+  document.getElementById('voortgang-sectie').innerHTML = `
+    <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px">
+      <span>Slagingspercentage</span><span><strong>${pctVold}%</strong> (${vold} van ${ll.length})</span>
+    </div>
+    <div class="voortgang-balk">
+      <div class="voortgang-vulling ${voortgangKlasse}" style="width:${pctVold}%"></div>
+    </div>`;
+
+  // Advies
+  let adviesKlasse, adviesTekst;
+  if (gemC < 5.5 || pctVold < 50) {
+    adviesKlasse = 'advies-streng';
+    adviesTekst = '⚠️ De toets lijkt streng. Het gemiddelde en/of slagingspercentage is laag. Bekijk de leerdoelen, opgaven en omstandigheden voordat je de normering aanpast.';
+  } else if (gemC > 7.5 && pctVold > 90) {
+    adviesKlasse = 'advies-makkelijk';
+    adviesTekst = '📈 De toets lijkt aan de makkelijke kant. Het gemiddelde en slagingspercentage zijn hoog.';
+  } else {
+    adviesKlasse = 'advies-passend';
+    adviesTekst = '✅ De resultaten liggen in het middengebied. Beoordeel de toets ook op inhoud en leerdoelen.';
+  }
+  document.getElementById('advies-box').innerHTML = `<div class="advies-box ${adviesKlasse}">${adviesTekst}</div>`;
+
+  // Verdeling (staafdiagram per punt 1-10)
+  const emmers = Array(10).fill(0);
+  cijfers.forEach(c => {
+    const emmer = Math.min(9, Math.max(0, Math.floor(c) - 1));
+    emmers[emmer]++;
+  });
+  const maxEmmer = Math.max(...emmers, 1);
+  document.getElementById('verdeling-balk').innerHTML = emmers.map((n, i) =>
+    `<div class="verdeling-staaf" style="height:${Math.round(n / maxEmmer * 100)}%;background:${i + 1 >= 5.5 ? 'var(--groen)' : 'var(--rood)'}">
+      ${n > 0 ? `<span>${n}</span>` : ''}
+    </div>`
+  ).join('');
+  document.getElementById('verdeling-labels').innerHTML = emmers.map((n, i) =>
+    `<div class="verdeling-label">${i + 1}</div>`
+  ).join('');
+}
+
+function avg(arr) { return arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0; }
+function stdDev(arr) {
+  if (arr.length < 2) return 0;
+  const m = avg(arr);
+  return Math.sqrt(arr.reduce((s, x) => s + (x - m) ** 2, 0) / arr.length);
+}
+
+// ══════════════════════════════════════════════════
+// EXPORT
+// ══════════════════════════════════════════════════
+function exporteerLeerlingenCSV() {
+  leesFormulier();
+  const inst = staat.instellingen;
+  const heeftOnderdelen = staat.onderdelen.length > 0;
+
+  let kop = 'Nr,Klas,Score';
+  if (heeftOnderdelen) {
+    staat.onderdelen.forEach(o => kop += `,${csvQuote(o.naam)}`);
+    kop += ',Totaal';
+  }
+  if (inst.bonuspunten === 'ja') kop += ',Bonus';
+  kop += ',Cijfer,Status,Opmerking\n';
+
+  const rijen = staat.leerlingen.map((ll, idx) => {
+    const score = getLeerlingScore(ll);
+    const cijfer = berekenCijfer(score, inst);
+    const [status] = cijferStatus(cijfer);
+    let rij = `${idx + 1},${csvQuote(ll.klas)},${ll.score ?? ''}`;
+    if (heeftOnderdelen) {
+      staat.onderdelen.forEach((o, i) => rij += `,${(ll.onderdelen || [])[i] ?? ''}`);
+      rij += `,${score}`;
+    }
+    if (inst.bonuspunten === 'ja') rij += `,${ll.bonus || 0}`;
+    rij += `,${formatCijfer(cijfer)},${status},${csvQuote(ll.opmerking || '')}`;
+    return rij;
+  }).join('\n');
+
+  downloadCSV(kop + rijen, `leerlingen_${staat.toets.naam || 'toets'}.csv`);
+}
+
+function exporteerExcelCSV() {
+  leesFormulier();
+  const inst = staat.instellingen;
+  let kop = 'Nr;Klas;Score;Cijfer;Status;Opmerking\n';
+  const rijen = staat.leerlingen.map((ll, idx) => {
+    const score = getLeerlingScore(ll);
+    const cijfer = berekenCijfer(score, inst);
+    const [status] = cijferStatus(cijfer);
+    const cijferNL = formatCijfer(cijfer).replace('.', ',');
+    return `${idx + 1};${ll.klas || ''};${score};${cijferNL};${status};${ll.opmerking || ''}`;
+  }).join('\n');
+  downloadCSV(kop + rijen, `leerlingen_excel_${staat.toets.naam || 'toets'}.csv`, ';');
+}
+
+function exporteerNormeringCSV() {
+  leesFormulier();
+  const inst = staat.instellingen;
+  let inhoud = 'Score,Cijfer,Status\n';
+  for (let s = 0; s <= inst.maxPunten; s++) {
+    const c = berekenCijfer(s, inst);
+    const [status] = cijferStatus(c);
+    inhoud += `${s},${formatCijfer(c)},${status}\n`;
+  }
+  downloadCSV(inhoud, `normering_${staat.toets.naam || 'toets'}.csv`);
+}
+
+function exporteerJSON() {
+  leesFormulier();
+  const blob = new Blob([JSON.stringify(staat, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `toets_${staat.toets.naam || 'export'}.json`;
+  a.click(); URL.revokeObjectURL(url);
+  toonToast('JSON geëxporteerd', 'succes');
+}
+
+function downloadCSV(inhoud, bestandsnaam) {
+  const bom = '\uFEFF'; // BOM voor Excel
+  const blob = new Blob([bom + inhoud], { type: 'text/csv;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = bestandsnaam;
+  a.click(); URL.revokeObjectURL(url);
+  toonToast('CSV gedownload', 'succes');
+}
+
+function csvQuote(str) {
+  if (!str) return '';
+  str = String(str);
+  if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+    return '"' + str.replace(/"/g, '""') + '"';
+  }
+  return str;
+}
+
+function kopieerNormeringstabel() {
+  leesFormulier();
+  const inst = staat.instellingen;
+  let tekst = 'Score\tCijfer\tStatus\n';
+  for (let s = 0; s <= inst.maxPunten; s++) {
+    const c = berekenCijfer(s, inst);
+    const [status] = cijferStatus(c);
+    tekst += `${s}\t${formatCijfer(c)}\t${status}\n`;
+  }
+  navigator.clipboard?.writeText(tekst).then(() => toonToast('Tabel gekopieerd naar klembord', 'succes'))
+    .catch(() => toonToast('Kopiëren niet gelukt', 'fout'));
+}
+
+// ══════════════════════════════════════════════════
+// IMPORT
+// ══════════════════════════════════════════════════
+function importeerCSV(input) {
+  const bestand = input.files[0];
+  if (!bestand) return;
+  const reader = new FileReader();
+  reader.onload = e => verwerkCSVTekst(e.target.result);
+  reader.readAsText(bestand, 'UTF-8');
+  input.value = '';
+}
+
+function importeerGeplakteCSV() {
+  const tekst = document.getElementById('csv-plak-tekst').value.trim();
+  if (!tekst) { toonToast('Geen tekst ingevoerd', 'fout'); return; }
+  verwerkCSVTekst(tekst);
+}
+
+function verwerkCSVTekst(tekst) {
+  const regels = tekst.split('\n').map(r => r.trim()).filter(r => r);
+  if (regels.length < 2) { toonToast('Bestand bevat te weinig regels', 'fout'); return; }
+
+  // Detecteer scheidingsteken
+  const sep = regels[0].includes(';') ? ';' : ',';
+
+  const kop = regels[0].split(sep).map(k => k.trim().toLowerCase().replace(/"/g,''));
+  let aangemaakt = 0;
+
+  regels.slice(1).forEach(regel => {
+    const cols = splitCSVRegel(regel, sep);
+    if (cols.length < 2) return;
+
+    let voornaam = '', achternaam = '', klas = '', score = '';
+
+    if (kop.includes('voornaam') && kop.includes('achternaam')) {
+      voornaam = cols[kop.indexOf('voornaam')] || '';
+      achternaam = cols[kop.indexOf('achternaam')] || '';
+    } else if (kop.includes('naam')) {
+      const delen = (cols[kop.indexOf('naam')] || '').split(' ');
+      voornaam = delen[0] || '';
+      achternaam = delen.slice(1).join(' ');
+    } else {
+      const delen = (cols[0] || '').split(' ');
+      voornaam = delen[0] || '';
+      achternaam = delen.slice(1).join(' ');
+    }
+
+    klas = kop.includes('klas') ? (cols[kop.indexOf('klas')] || '') : (cols.length > 1 ? cols[cols.length - 2] : '');
+    score = kop.includes('score') ? (cols[kop.indexOf('score')] || '') : (cols[cols.length - 1] || '');
+    score = score.replace(',', '.');
+
+    staat.leerlingen.push({ klas, score: score === '' ? '' : +score, bonus: 0, onderdelen: [], opmerking: '' });
+    aangemaakt++;
+  });
+
+  slaOp();
+  tekenLeerlingenTabel();
+  toonToast(`${aangemaakt} leerlingen geïmporteerd`, 'succes');
+  wisselTab('leerlingen', document.querySelectorAll('.tab-btn')[1]);
+}
+
+function splitCSVRegel(regel, sep) {
+  const cols = [];
+  let huidig = '', inQuotes = false;
+  for (let i = 0; i < regel.length; i++) {
+    const c = regel[i];
+    if (c === '"') { inQuotes = !inQuotes; }
+    else if (c === sep && !inQuotes) { cols.push(huidig.trim()); huidig = ''; }
+    else huidig += c;
+  }
+  cols.push(huidig.trim());
+  return cols;
+}
+
+function importeerJSON(input) {
+  const bestand = input.files[0];
+  if (!bestand) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const geladen = JSON.parse(e.target.result);
+      staat.toets = { ...staat.toets, ...geladen.toets };
+      staat.instellingen = { ...staat.instellingen, ...geladen.instellingen };
+      staat.onderdelen = geladen.onderdelen || [];
+      staat.leerlingen = geladen.leerlingen || [];
+      vulFormulierIn();
+      herbereken();
+      tekenLeerlingenTabel();
+      slaOp();
+      toonToast('Toets geladen vanuit JSON', 'succes');
+    } catch(err) {
+      toonToast('JSON-bestand is ongeldig', 'fout');
+    }
+  };
+  reader.readAsText(bestand);
+  input.value = '';
+}
+
+// ══════════════════════════════════════════════════
+// PRESETS
+// ══════════════════════════════════════════════════
+function laadPreset(preset) {
+  leesFormulier();
+  const inst = staat.instellingen;
+  const max = inst.maxPunten;
+
+  switch(preset) {
+    case 'lineair':
+      document.getElementById('formule-type').value = 'lineair';
+      document.getElementById('lineair-opslag').value = 1.0;
+      break;
+    case 'lineair12':
+      document.getElementById('formule-type').value = 'lineair';
+      document.getElementById('lineair-opslag').value = 1.2;
+      break;
+    case 'div56':
+      document.getElementById('formule-type').value = 'delerfixed';
+      document.getElementById('deler-waarde').value = 5.6;
+      break;
+    case 'div4plus2':
+      document.getElementById('formule-type').value = 'delerplus';
+      document.getElementById('delerplus-deler').value = 4;
+      document.getElementById('delerplus-plus').value = 2;
+      break;
+    case '41':
+      document.getElementById('formule-type').value = 'lineair';
+      document.getElementById('lineair-opslag').value = 1.2;
+      document.getElementById('max-punten').value = 41;
+      break;
+    case '34':
+      document.getElementById('formule-type').value = 'lineair';
+      document.getElementById('lineair-opslag').value = 1.0;
+      document.getElementById('max-punten').value = 34;
+      break;
+    case '31':
+      document.getElementById('formule-type').value = 'lineair';
+      document.getElementById('lineair-opslag').value = 1.0;
+      document.getElementById('max-punten').value = 31;
+      break;
+    case 'cesuur':
+      document.getElementById('formule-type').value = 'cesuur';
+      break;
+  }
+  wisselFormule();
+  slaOp();
+  herbereken();
+  toonToast('Preset geladen', 'succes');
+}
+
+// ══════════════════════════════════════════════════
+// HULPFUNCTIES
+// ══════════════════════════════════════════════════
+function esc(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function toonToast(tekst, type = '') {
+  const el = document.getElementById('toast');
+  el.textContent = tekst;
+  el.className = type ? `zichtbaar ${type}` : 'zichtbaar';
+  clearTimeout(el._timer);
+  el._timer = setTimeout(() => el.classList.remove('zichtbaar'), 3000);
+}
+
+function sluitModal(e) {
+  if (e.target === document.getElementById('modal-overlay')) {
+    document.getElementById('modal-overlay').classList.remove('open');
+  }
+}
+
+// ══════════════════════════════════════════════════
+// ALLES WISSEN / VOORBEELD
+// ══════════════════════════════════════════════════
+function allesWissen() {
+  if (!confirm('Weet je zeker dat je alles wilt wissen? Dit kan niet ongedaan worden gemaakt.')) return;
+  localStorage.removeItem('cijfertool_schone_versie_v1');
+  location.reload();
+}
+
+// ══════════════════════════════════════════════════
+// OPSTARTEN
+// ══════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  // Standaard datum instellen
+  document.getElementById('toets-datum').value = new Date().toISOString().split('T')[0];
+
+  laadVanStorage();
+
+  // Auto-opslaan bij fokusverlies
+  document.querySelectorAll('input, select').forEach(el => {
+    el.addEventListener('change', () => { leesFormulier(); herbereken(); slaOp(); });
+  });
+});
+</script>
+
+<style>
+  .carmel-footer {
+    background: var(--cs-donkerblauw);
+    color: rgba(255,255,255,0.6);
+    text-align: center;
+    font-size: 12px;
+    padding: 14px;
+    margin-top: 40px;
+    border-top: 4px solid var(--cs-blauw);
+  }
+  .carmel-footer a { color: rgba(255,255,255,0.8); text-decoration: none; }
+  .carmel-footer a:hover { color: white; }
+  @media print { .carmel-footer { display: none; } }
+</style>
+<div class="carmel-footer">
+  CijferTool Carmel College Salland &nbsp;·&nbsp; Alle gegevens worden lokaal opgeslagen in uw browser. Geen leerlingdata naar een server.
+</div>
+
+<script>
+function heeftScore(l){const a=staat.onderdelen.length ? staat.onderdelen.map((_,i)=>(l.onderdelen||[])[i]) : [l.score];return a.length>0 && a.every(x=>x!==''&&x!=null&&Number.isFinite(+x));}
+function updateQuick(){const el=document.getElementById('quick-score'),o=document.getElementById('quick-result'),c=document.getElementById('quick-caption');if(!el)return; const s=+el.value;const ok=el.value!==''&&s>=0&&(staat.instellingen.bonuspunten==='ja'||s<=staat.instellingen.maxPunten);const n=ok?berekenCijfer(s,staat.instellingen):NaN;o.textContent=Number.isFinite(n)?formatCijfer(n).replace('.',','):'—';c.textContent=el.value===''?'Vul een score in':Number.isFinite(n)?cijferStatus(n)[0]:'Controleer de invoer';}
+const oudTeken=tekenLeerlingenTabel;
+tekenLeerlingenTabel=function(){oudTeken();document.getElementById('badge-leerlingen').textContent=staat.leerlingen.length;staat.leerlingen.forEach((l,i)=>{if(!heeftScore(l)){const c=document.getElementById('cijfer-'+i),s=document.getElementById('status-'+i);if(c)c.textContent='—';if(s){s.textContent='Nog invullen';s.className='badge';s.closest('tr').className='';}}});document.querySelectorAll('#leerling-tbody tr').forEach((r,i)=>{r.querySelectorAll('input').forEach(el=>{const th=document.querySelectorAll('#leerling-thead th')[el.closest('td').cellIndex];el.setAttribute('aria-label',(th?.textContent||'Waarde')+' leerling '+(i+1));});r.querySelector('button')?.setAttribute('aria-label','Verwijder leerling '+(i+1));});updateQuick();};
+const oudOpslaan=slaOp;
+slaOp=function(){oudOpslaan();try{localStorage.setItem('cijfertool_schone_versie_v1',JSON.stringify(staat));document.getElementById('save-state').textContent='✓ Opgeslagen op dit apparaat';}catch(e){document.getElementById('save-state').textContent='Opslaan niet gelukt · download JSON';}updateQuick();};
+const oudTab=wisselTab;
+wisselTab=function(naam,knop){oudTab(naam,knop);document.querySelectorAll('.tab-btn').forEach(b=>b.setAttribute('aria-current',b===knop?'page':'false'));};
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('.preset-chip,.import-area').forEach(el=>{el.setAttribute('role','button');el.tabIndex=0;el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click();}});});document.getElementById('bulk-aantal').setAttribute('aria-label','Aantal leerlingen');document.getElementById('bulk-klas').setAttribute('aria-label','Klas voor nieuwe leerlingen');updateQuick();});
+</script></body>
+</html>
